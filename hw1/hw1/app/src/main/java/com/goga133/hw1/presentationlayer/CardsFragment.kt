@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_numbers.view.*
  */
 open class CardsFragment : Fragment() {
     companion object {
-        const val CONTAINER_TAG = "FRAGMENT_CONTAINER";
+        const val CONTAINER_TAG = "FRAGMENT_CONTAINER"
         const val CARDS_ARRAY = "CARDS_ARRAY"
     }
 
@@ -62,9 +62,9 @@ open class CardsFragment : Fragment() {
 
         cards = if (savedInstanceState == null) {
             CardRepository.instance.list()
-        } else {
-            savedInstanceState.getSerializable(CARDS_ARRAY) as ArrayList<Card>;
-        }
+        } else ({
+            savedInstanceState.getSerializable(CARDS_ARRAY)
+        }) as ArrayList<Card>?
 
         val adapter = cards?.let { CardsAdapter(it, CardClickHandler()) }
 
@@ -77,13 +77,14 @@ open class CardsFragment : Fragment() {
                     Configuration.ORIENTATION_LANDSCAPE -> 4
                     else -> 3
                 }
+
             )
             this.adapter = adapter
         }
 
         root.button_add.setOnClickListener(adapter?.let { AddClickHandler(it, recyclerView) })
 
-        return root;
+        return root
     }
 
     inner class AddClickHandler(
