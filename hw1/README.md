@@ -6,6 +6,6 @@
 </div>
 <div align="center">
 
-![](.//media//example.gif)
+![](.//media//preview.gif)
 
 </div>
