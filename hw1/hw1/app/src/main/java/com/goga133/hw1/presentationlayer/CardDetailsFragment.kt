@@ -15,7 +15,18 @@ import kotlinx.android.synthetic.main.fragment_details.view.*
  * @author <a href="mailto:asromanyuk@edu.hse.ru"> Andrey Romanyuk</a>
  */
 open class CardDetailsFragment : Fragment() {
+    companion object {
+        private const val CARD_NAME = "card"
+
+        fun newInstance(card: Card): CardDetailsFragment {
+            return CardDetailsFragment().apply {
+                arguments = Bundle().apply { putSerializable(CARD_NAME, card) }
+            }
+        }
+    }
+
     private var listener: ICardListener? = null
+    private var card: Card? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -25,16 +36,12 @@ open class CardDetailsFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+        card = null;
     }
 
-    companion object {
-        private const val CARD_NAME = "card"
-
-        fun newInstance(card: Card): CardDetailsFragment {
-            return CardDetailsFragment().apply {
-                arguments = Bundle().apply { putSerializable(CARD_NAME, card) }
-            }
-        }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(CARD_NAME, card);
     }
 
     override fun onCreateView(
@@ -48,12 +55,19 @@ open class CardDetailsFragment : Fragment() {
         root.button_back.setOnClickListener(BackClickHandler())
 
         // Получение переданного экземпляра Card:
-        val card: Card = this.arguments?.getSerializable(CARD_NAME) as Card
-
-        root.textView_number.apply {
-            text = card.number.toString()
-            setTextColor(card.getColor())
+        card = if (savedInstanceState == null) {
+            this.arguments?.getSerializable(CARD_NAME) as Card
+        } else {
+            savedInstanceState.getSerializable(CARD_NAME) as Card;
         }
+
+        card?.let { card ->
+            root.textView_number.apply {
+                text = card.number.toString()
+                setTextColor(card.getColor())
+            }
+        }
+
 
         return root
     }

@@ -24,9 +24,11 @@ import kotlinx.android.synthetic.main.fragment_numbers.view.*
 open class CardsFragment : Fragment() {
     companion object {
         const val CONTAINER_TAG = "FRAGMENT_CONTAINER";
+        const val CARDS_ARRAY = "CARDS_ARRAY"
     }
 
     private var listener: ICardListener? = null
+    private var cards: ArrayList<Card>? = null
 
     /**
      * Инициализируем переменную listener при создании фрагмента.
@@ -44,6 +46,12 @@ open class CardsFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+        cards = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(CARDS_ARRAY, cards)
     }
 
     override fun onCreateView(
@@ -52,7 +60,13 @@ open class CardsFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_numbers, container, false)
 
-        val adapter = CardsAdapter(CardRepository.instance.list(), CardClickHandler())
+        cards = if (savedInstanceState == null) {
+            CardRepository.instance.list()
+        } else {
+            savedInstanceState.getSerializable(CARDS_ARRAY) as ArrayList<Card>;
+        }
+
+        val adapter = cards?.let { CardsAdapter(it, CardClickHandler()) }
 
         val recyclerView = root.recyclerView_numbers.apply {
             this.setHasFixedSize(false)
@@ -61,14 +75,13 @@ open class CardsFragment : Fragment() {
             this.layoutManager = GridLayoutManager(
                 context, when (resources.configuration.orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> 4
-                    Configuration.ORIENTATION_PORTRAIT -> 3
                     else -> 3
                 }
             )
             this.adapter = adapter
         }
 
-        root.button_add.setOnClickListener(AddClickHandler(adapter, recyclerView))
+        root.button_add.setOnClickListener(adapter?.let { AddClickHandler(it, recyclerView) })
 
         return root;
     }
