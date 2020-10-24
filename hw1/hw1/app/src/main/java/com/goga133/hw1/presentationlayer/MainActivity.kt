@@ -22,14 +22,7 @@ class MainActivity : AppCompatActivity(), ICardListener {
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container_view, CardsFragment(), CardsFragment.CONTAINER_TAG)
                 .commit()
-        } else {
-            // TODO: Восстановить данные
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        // TODO: Прописать сохранение.
-        super.onSaveInstanceState(outState, outPersistentState)
     }
 
 
