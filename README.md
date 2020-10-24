@@ -1,4 +1,4 @@
-# Домашнии задачи к  курсу Android от Mail.Ru
+# Домашниe задачи к  курсу Android от Mail.Ru
 <div align="right">
 
 ### Сентябрь - Декабрь 2020
