@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), ICardListener {
         if (savedInstanceState == null) {
             // Транзакция происходит только при старте приложения
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_view, CardsFragment(), "FRAGMENT_CONTAINER")
+                .add(R.id.fragment_container_view, CardsFragment(), CardsFragment.CONTAINER_TAG)
                 .commit()
         } else {
             // TODO: Восстановить данные
