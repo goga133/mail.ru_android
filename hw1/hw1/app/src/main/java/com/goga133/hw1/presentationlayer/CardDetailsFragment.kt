@@ -35,12 +35,14 @@ open class CardDetailsFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+        // Подсчищаем ссылки:
         listener = null
         card = null;
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        // Сохраняем текущую карточку.
         outState.putSerializable(CARD_NAME, card);
     }
 
@@ -48,7 +50,6 @@ open class CardDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val root = inflater.inflate(R.layout.fragment_details, container, false)
 
         // Слушатель для кнопки "Back":
@@ -56,11 +57,14 @@ open class CardDetailsFragment : Fragment() {
 
         // Получение переданного экземпляра Card:
         card = if (savedInstanceState == null) {
+            // Если сохранённых данных нет - получаем их из Bundle конструктора фрагмента.
             this.arguments?.getSerializable(CARD_NAME) as Card
         } else {
+            // Иначе - пользуемся сохранённой версией.
             savedInstanceState.getSerializable(CARD_NAME) as Card;
         }
 
+        // Если ссылка на объект не null, тогда устанавливаем к textView параметры text и color.
         card?.let { card ->
             root.textView_number.apply {
                 text = card.number.toString()
@@ -72,6 +76,9 @@ open class CardDetailsFragment : Fragment() {
         return root
     }
 
+    /**
+     * Handler class для нажатия кнопки Back
+     */
     inner class BackClickHandler : View.OnClickListener {
         override fun onClick(view: View?) {
             listener?.onCardBack();

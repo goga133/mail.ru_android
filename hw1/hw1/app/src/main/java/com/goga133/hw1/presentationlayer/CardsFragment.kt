@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_numbers.view.*
  */
 open class CardsFragment : Fragment() {
     companion object {
-        const val CONTAINER_TAG = "FRAGMENT_CONTAINER"
         const val CARDS_ARRAY = "CARDS_ARRAY"
     }
 
@@ -41,7 +40,7 @@ open class CardsFragment : Fragment() {
     }
 
     /**
-     * Очищаем ссылку на listener при уничтожении экземпляра фрагмента.
+     * Очищаем ссылку на listener и cards при уничтожении экземпляра фрагмента.
      */
     override fun onDetach() {
         super.onDetach()
@@ -51,6 +50,7 @@ open class CardsFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        // Сохраняем массив карточек:
         outState.putSerializable(CARDS_ARRAY, cards)
     }
 
@@ -60,11 +60,12 @@ open class CardsFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_numbers, container, false)
 
+        // Инициализириуем массив карточек:
         cards = if (savedInstanceState == null) {
             CardRepository.instance.list()
-        } else ({
-            savedInstanceState.getSerializable(CARDS_ARRAY)
-        }) as ArrayList<Card>?
+        } else {
+            savedInstanceState.getSerializable(CARDS_ARRAY) as ArrayList<Card>?
+        }
 
         val adapter = cards?.let { CardsAdapter(it, CardClickHandler()) }
 
@@ -74,6 +75,7 @@ open class CardsFragment : Fragment() {
             // Создаём взависимости от ориентации GridLayoutManager
             this.layoutManager = GridLayoutManager(
                 context, when (resources.configuration.orientation) {
+                    // Если ориентация LANDSPACE, то 4 столбца, иначе - 3
                     Configuration.ORIENTATION_LANDSCAPE -> 4
                     else -> 3
                 }
@@ -87,6 +89,9 @@ open class CardsFragment : Fragment() {
         return root
     }
 
+    /**
+     * Handler-class для описания функционала кнопки Add при клике.
+     */
     inner class AddClickHandler(
         private val adapter: CardsAdapter,
         private val recyclerView: RecyclerView
@@ -99,6 +104,9 @@ open class CardsFragment : Fragment() {
         }
     }
 
+    /**
+     * Handler-class для описания функционала клика по карточке.
+     */
     inner class CardClickHandler() : CardHolder.IListener {
         override fun onCardClicked(position: Int) {
             val card = CardRepository.instance.item(position)
