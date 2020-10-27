@@ -20,12 +20,12 @@ class MainActivity : AppCompatActivity(), ICardListener {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        if (savedInstanceState == null) {
-            // Транзакция происходит только при старте приложения
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_view, CardsFragment(), CONTAINER_TAG)
-                .commit()
-        }
+//        if (savedInstanceState == null) {
+//            // Транзакция происходит только при старте приложения
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.fragment_container_view, CardsFragment(), CONTAINER_TAG)
+//                .commit()
+//        }
     }
 
 
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), ICardListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, instance, CONTAINER_TAG)
             .addToBackStack(CONTAINER_TAG)
-            .setCustomAnimations(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
             .commit()
     }
 
