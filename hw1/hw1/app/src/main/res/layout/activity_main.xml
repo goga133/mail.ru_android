@@ -25,13 +25,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <FrameLayout
         android:id="@+id/fragment_container_view"
-        android:name="com.goga133.hw1.presentationlayer.CardsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:foregroundGravity="center"
-        android:tag="FRAGMENT_CONTAINER"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

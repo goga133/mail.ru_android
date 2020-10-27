@@ -20,12 +20,12 @@ class MainActivity : AppCompatActivity(), ICardListener {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-//        if (savedInstanceState == null) {
-//            // Транзакция происходит только при старте приложения
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.fragment_container_view, CardsFragment(), CONTAINER_TAG)
-//                .commit()
-//        }
+        if (savedInstanceState == null) {
+            // Транзакция происходит только при старте приложения
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_view, CardsFragment(), CONTAINER_TAG)
+                .commit()
+        }
     }
 
 
