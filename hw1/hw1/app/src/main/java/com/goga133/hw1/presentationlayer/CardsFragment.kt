@@ -51,7 +51,13 @@ open class CardsFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Сохраняем массив карточек:
-        outState.putSerializable(CARDS_ARRAY, cards)
+        outState.putParcelableArrayList(CARDS_ARRAY, cards)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // Сохраняем в cards список
+        cards = savedInstanceState?.getParcelableArrayList<Card>(CARDS_ARRAY)
     }
 
     override fun onCreateView(
@@ -61,11 +67,9 @@ open class CardsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_numbers, container, false)
 
         // Инициализириуем массив карточек:
-        cards = if (savedInstanceState == null) {
-            CardRepository.instance.list()
-        } else {
-            savedInstanceState.getSerializable(CARDS_ARRAY) as ArrayList<Card>?
-        }
+        if(cards == null)
+            cards = CardRepository.instance.list()
+
 
         val adapter = cards?.let { CardsAdapter(it, CardClickHandler()) }
 

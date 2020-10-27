@@ -46,6 +46,7 @@ open class CardDetailsFragment : Fragment() {
         outState.putSerializable(CARD_NAME, card);
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
