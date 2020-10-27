@@ -5,14 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.goga133.hw1.R
 import com.goga133.hw1.objects.Card
 import com.goga133.hw1.presentationlayer.listeners.ICardListener
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * @author <a href="mailto:asromanyuk@edu.hse.ru"> Andrey Romanyuk</a>
  */
 class MainActivity : AppCompatActivity(), ICardListener {
 
-    private val containerTag by lazy { resources.getString(R.string.FRAGMENT_TAG) }
+    companion object{
+         const val CONTAINER_TAG = "FRAGMENT_CONTAINER"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(), ICardListener {
         if (savedInstanceState == null) {
             // Транзакция происходит только при старте приложения
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_view, CardsFragment(), containerTag)
+                .add(R.id.fragment_container_view, CardsFragment(), CONTAINER_TAG)
                 .commit()
         }
     }
@@ -35,8 +36,8 @@ class MainActivity : AppCompatActivity(), ICardListener {
         val instance = CardDetailsFragment.newInstance(card)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_view, instance, containerTag)
-            .addToBackStack(containerTag)
+            .replace(R.id.fragment_container_view, instance, CONTAINER_TAG)
+            .addToBackStack(CONTAINER_TAG)
             .setCustomAnimations(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
             .commit()
     }
