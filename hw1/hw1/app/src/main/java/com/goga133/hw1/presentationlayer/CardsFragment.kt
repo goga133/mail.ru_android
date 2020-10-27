@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.fragment_numbers.view.*
 open class CardsFragment : Fragment() {
     companion object {
         const val CARDS_ARRAY = "CARDS_ARRAY"
+        const val LANDSCAPE_CARDS_COUNT = 4;
+        const val DEFAULT_CARDS_COUNT = 3;
     }
 
     private var listener: ICardListener? = null
@@ -80,8 +82,8 @@ open class CardsFragment : Fragment() {
             this.layoutManager = GridLayoutManager(
                 context, when (resources.configuration.orientation) {
                     // Если ориентация LANDSPACE, то 4 столбца, иначе - 3
-                    Configuration.ORIENTATION_LANDSCAPE -> 4
-                    else -> 3
+                    Configuration.ORIENTATION_LANDSCAPE -> LANDSCAPE_CARDS_COUNT
+                    else -> DEFAULT_CARDS_COUNT
                 }
 
             )
