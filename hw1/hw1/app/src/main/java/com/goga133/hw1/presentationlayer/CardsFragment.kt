@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.hw1.R
-import com.goga133.hw1.businesslayer.CardRepository
 import com.goga133.hw1.objects.Card
 import com.goga133.hw1.presentationlayer.adapter.CardHolder
 import com.goga133.hw1.presentationlayer.adapter.CardsAdapter
@@ -24,8 +23,28 @@ import kotlinx.android.synthetic.main.fragment_numbers.view.*
 open class CardsFragment : Fragment() {
     companion object {
         const val CARDS_ARRAY = "CARDS_ARRAY"
-        const val LANDSCAPE_CARDS_COUNT = 4;
-        const val DEFAULT_CARDS_COUNT = 3;
+
+        // Количество колонок в разных ориентациях:
+        const val LANDSCAPE_COLUMN_COUNT = 4
+        const val DEFAULT_COLUMN_COUNT = 3
+
+        // Дефолтное количество карточек:
+        private const val DEFAULT_CARDS_COUNT = 100
+
+        // Для хранения ссылки:
+        private val cardList : ArrayList<Card> by lazy{
+            initializeData()
+        }
+
+        // Инициализация списка:
+        private fun initializeData(): ArrayList<Card> {
+            val cardList = ArrayList<Card>(DEFAULT_CARDS_COUNT)
+
+            for (i in 1..DEFAULT_CARDS_COUNT)
+                cardList.add(Card(i))
+
+            return cardList;
+        }
     }
 
     private var listener: ICardListener? = null
@@ -69,8 +88,8 @@ open class CardsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_numbers, container, false)
 
         // Инициализириуем массив карточек:
-        if(cards == null)
-            cards = CardRepository.instance.list()
+        if (cards == null)
+            cards = cardList
 
 
         val adapter = cards?.let { CardsAdapter(it, CardClickHandler()) }
@@ -82,8 +101,8 @@ open class CardsFragment : Fragment() {
             this.layoutManager = GridLayoutManager(
                 context, when (resources.configuration.orientation) {
                     // Если ориентация LANDSPACE, то 4 столбца, иначе - 3
-                    Configuration.ORIENTATION_LANDSCAPE -> LANDSCAPE_CARDS_COUNT
-                    else -> DEFAULT_CARDS_COUNT
+                    Configuration.ORIENTATION_LANDSCAPE -> LANDSCAPE_COLUMN_COUNT
+                    else -> DEFAULT_COLUMN_COUNT
                 }
 
             )
@@ -115,7 +134,7 @@ open class CardsFragment : Fragment() {
      */
     inner class CardClickHandler() : CardHolder.IListener {
         override fun onCardClicked(position: Int) {
-            val card = CardRepository.instance.item(position)
+            val card = cardList[position]
 
             listener?.onCardClicked(card)
         }
